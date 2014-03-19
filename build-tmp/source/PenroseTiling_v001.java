@@ -36,7 +36,10 @@ public void setup() {
 		penrosePattern.get(i).aVariant = 0;
 		penrosePattern.get(i).aCornerA = new PVector(0, 0);
 		penrosePattern.get(i).aCornerB = new PVector(radius * sin((2*i - 1) * PI / 10), radius * cos((2*i - 1) * PI / 10)); 
-		penrosePattern.get(i).aCornerC = new PVector(radius * sin((2*i + 1) * PI / 10), radius * cos((2*i + 1) * PI / 10)); 
+		penrosePattern.get(i).aCornerC = new PVector(radius * sin((2*i + 1) * PI / 10), radius * cos((2*i + 1) * PI / 10));
+		PVector tempVec3 = new PVector(0,0);
+        penrosePattern.get(i).aAngleBC = calculateAngelBetweenVectors(penrosePattern.get(i).aCornerB, penrosePattern.get(i).aCornerC);
+        // penrosePattern.get(i).aAngleBC = i*10;
 	}
 
 	for (int j = 0; j < NUM_SUBDIVISIONS; j++) {
@@ -46,15 +49,15 @@ public void setup() {
 			subdivide(i);
 		}
 	}
-	println("newSize" + penrosePattern.size());
+	// println("newSize" + penrosePattern.size());
 
 	for (int i = 0; i < penrosePattern.size(); i++) {
-		println("aDraw: " + penrosePattern.get(i).aDraw);
+		// println("aDraw: " + penrosePattern.get(i).aDraw);
 	}
 }
 public void draw() {
 	background(0);
-	triangle(0, 0, mouseX, mouseY, 50, 50);
+	// triangle(0, 0, mouseX, mouseY, 50, 50);
 
 	pushMatrix();
 	translate(width/2, height/2);
@@ -64,21 +67,53 @@ public void draw() {
 			if (keyPressed) {
 				noStroke();
 			} else {
-				stroke(0);
+				stroke(255);
 				strokeWeight(0.1f);
 			}
+			randomSeed(i);
 			if (penrosePattern.get(i).aVariant == 0){
-				fill(255,0,0,50);
+				fill(255,0,0,random(25,50));
 			} else {
-				fill(0,255,0,50);
+				fill(0,255,0,random(25,50));
 			}
+			// noStroke();
 			PVector tempVec = calculateCoordinatesOfTriangleIncenter(penrosePattern.get(i).aCornerA, penrosePattern.get(i).aCornerB, penrosePattern.get(i).aCornerC).get();
 			float tempRadius = calculateRadiusOfTriangleIncenter(penrosePattern.get(i).aCornerA, penrosePattern.get(i).aCornerB, penrosePattern.get(i).aCornerC) * 2.0f;
 			ellipse(tempVec.x, tempVec.y, tempRadius, tempRadius);
+			arc(tempVec.x, tempVec.y, tempRadius, tempRadius,0,penrosePattern.get(i).aAngleBC);
 			triangle(penrosePattern.get(i).aCornerA.x, penrosePattern.get(i).aCornerA.y, penrosePattern.get(i).aCornerB.x, penrosePattern.get(i).aCornerB.y, penrosePattern.get(i).aCornerC.x, penrosePattern.get(i).aCornerC.y);
+			pushStyle();
+			pushMatrix();
+			rectMode(RADIUS);
+			stroke(255,255,0);
+			strokeWeight(0.3f);
+			// fill(255,0,255,50);
+			// noFill();
+			// line(penrosePattern.get(i).aCornerB.x, penrosePattern.get(i).aCornerB.y, penrosePattern.get(i).aCornerC.x, penrosePattern.get(i).aCornerC.y);
+			// PVector tempVec2 = penrosePattern.get(i).aCornerB.get();
+			// float tempRotation = PVector.angleBetween(penrosePattern.get(i).aCornerB, penrosePattern.get(i).aCornerC);
+			translate(tempVec.x, tempVec.y);
+			rotate(penrosePattern.get(i).aAngleBC);
+            // println("tempRotation: " + tempRotation);
+			// rotate(mouseX/100.0);
+			strokeWeight(0.1f);
+			rect(0,0, tempRadius/2, tempRadius/2);
+			popMatrix();
+			popStyle();
 		}
 	}
 	popMatrix();
+}
+
+public float calculateAngelBetweenVectors(PVector _Vec1, PVector _Vec2){
+	float deltaX = _Vec1.x - _Vec2.x;
+	float deltaY = _Vec1.y - _Vec2.y;
+	float angleInDegrees;
+	angleInDegrees = atan2(deltaY, deltaX);
+	if (angleInDegrees < 0) {
+		angleInDegrees = 2*PI + angleInDegrees;
+	}
+	return angleInDegrees;
 }
 
 public PVector calculateCoordinatesOfTriangleIncenter(PVector _CornerA, PVector _CornerB, PVector _CornerC){
@@ -113,18 +148,22 @@ public void subdivide(int _i){
 
             penrosePattern.add(new aTriangle());
             penrosePattern.get(penrosePattern.size() - 1).setValues(penrosePattern.get(_i).aColor, 0, penrosePattern.get(_i).aCornerC, P, penrosePattern.get(_i).aCornerB);
+            penrosePattern.get(penrosePattern.size() - 1).aAngleBC = calculateAngelBetweenVectors(P, penrosePattern.get(_i).aCornerB);
+            println("aAngleBC: " + penrosePattern.get(penrosePattern.size() - 1).aAngleBC);
 
             penrosePattern.add(new aTriangle());
             penrosePattern.get(penrosePattern.size() - 1).setValues(penrosePattern.get(_i).aColor, 1, P,penrosePattern.get(_i).aCornerC, penrosePattern.get(_i).aCornerA);
+            penrosePattern.get(penrosePattern.size() - 1).aAngleBC = calculateAngelBetweenVectors(penrosePattern.get(_i).aCornerC, penrosePattern.get(_i).aCornerA);
+            println("aAngleBC: " + penrosePattern.get(penrosePattern.size() - 1).aAngleBC);
 
-            println("PVector P: " + P);
-            println("old aCornerA: " + penrosePattern.get(_i).aCornerA);
-            println("old aCornerB: " + penrosePattern.get(_i).aCornerB);
-            println("old aCornerC: " + penrosePattern.get(_i).aCornerC);
+            // println("PVector P: " + P);
+            // println("old aCornerA: " + penrosePattern.get(_i).aCornerA);
+            // println("old aCornerB: " + penrosePattern.get(_i).aCornerB);
+            // println("old aCornerC: " + penrosePattern.get(_i).aCornerC);
 
-            println("new aCornerA: " + penrosePattern.get(penrosePattern.size() - 1).aCornerA);
-            println("new aCornerB: " + penrosePattern.get(penrosePattern.size() - 1).aCornerB);
-            println("new aCornerC: " + penrosePattern.get(penrosePattern.size() - 1).aCornerC);
+            // println("new aCornerA: " + penrosePattern.get(penrosePattern.size() - 1).aCornerA);
+            // println("new aCornerB: " + penrosePattern.get(penrosePattern.size() - 1).aCornerB);
+            // println("new aCornerC: " + penrosePattern.get(penrosePattern.size() - 1).aCornerC);
 
             // penrosePattern.get(penrosePattern.size() - 1).aCornerA = new PVector(100, 100);;
             // result = [(0, aCornerC, P, aCornerB), (1, P, aCornerC, aCornerA)];
@@ -137,14 +176,22 @@ public void subdivide(int _i){
 
             penrosePattern.add(new aTriangle());
             penrosePattern.get(penrosePattern.size() - 1).setValues(penrosePattern.get(_i).aColor, 1, R,penrosePattern.get(_i).aCornerC, penrosePattern.get(_i).aCornerA);
+            penrosePattern.get(penrosePattern.size() - 1).aAngleBC = calculateAngelBetweenVectors(penrosePattern.get(_i).aCornerC, penrosePattern.get(_i).aCornerA);
+            println("aAngleBC: " + penrosePattern.get(penrosePattern.size() - 1).aAngleBC);
 
             penrosePattern.add(new aTriangle());
             penrosePattern.get(penrosePattern.size() - 1).setValues(penrosePattern.get(_i).aColor, 1, Q, R, penrosePattern.get(_i).aCornerB);
+            penrosePattern.get(penrosePattern.size() - 1).aAngleBC = calculateAngelBetweenVectors(R, penrosePattern.get(_i).aCornerB);
+            println("aAngleBC: " + penrosePattern.get(penrosePattern.size() - 1).aAngleBC);
 
             penrosePattern.add(new aTriangle());
             penrosePattern.get(penrosePattern.size() - 1).setValues(penrosePattern.get(_i).aColor, 0, R, Q, penrosePattern.get(_i).aCornerA);
+            penrosePattern.get(penrosePattern.size() - 1).aAngleBC = calculateAngelBetweenVectors(Q, penrosePattern.get(_i).aCornerA);
+            println("aAngleBC: " + penrosePattern.get(penrosePattern.size() - 1).aAngleBC);
         }
+        println("----: ");
     }
+    println("--------------------: ");
 }
 
 class aTriangle{
@@ -154,6 +201,7 @@ class aTriangle{
 	public PVector aCornerA;
 	public PVector aCornerB;
 	public PVector aCornerC;
+	public float aAngleBC;
 
 	public void setValues(int _aColor, int _aVariant, PVector _aCornerA, PVector _aCornerB, PVector _aCornerC){
 		this.aColor = _aColor;
