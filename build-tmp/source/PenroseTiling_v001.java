@@ -18,12 +18,16 @@ PVector cornerA, cornerB, cornerC;
 // aTriangle penrosePattern[i] = new aTriangle();
 ArrayList<aTriangle> penrosePattern;
 int NUM_SUBDIVISIONS = 4;
+PImage img1;
+PImage img2;
 
 public void setup() {
 
 	penrosePattern = new ArrayList<aTriangle>();
+	img1 = loadImage("Waterplants1.png");
+	img2 = loadImage("Waterplants2.png");
 
-	size(600, 600);
+	size(1200, 1200);
 // noFill();
 	smooth();
   	background(0);
@@ -64,12 +68,6 @@ public void draw() {
 	scale(mouseY/10.0f);
 	for (int i = 0; i < penrosePattern.size(); i++) {
 		if (penrosePattern.get(i).aDraw) {
-			if (keyPressed) {
-				noStroke();
-			} else {
-				stroke(255);
-				strokeWeight(0.1f);
-			}
 			randomSeed(i);
 			if (penrosePattern.get(i).aVariant == 0){
 				fill(255,0,0,random(25,50));
@@ -79,25 +77,36 @@ public void draw() {
 			// noStroke();
 			PVector tempVec = calculateCoordinatesOfTriangleIncenter(penrosePattern.get(i).aCornerA, penrosePattern.get(i).aCornerB, penrosePattern.get(i).aCornerC).get();
 			float tempRadius = calculateRadiusOfTriangleIncenter(penrosePattern.get(i).aCornerA, penrosePattern.get(i).aCornerB, penrosePattern.get(i).aCornerC) * 2.0f;
-			ellipse(tempVec.x, tempVec.y, tempRadius, tempRadius);
-			arc(tempVec.x, tempVec.y, tempRadius, tempRadius,0,penrosePattern.get(i).aAngleBC);
 			triangle(penrosePattern.get(i).aCornerA.x, penrosePattern.get(i).aCornerA.y, penrosePattern.get(i).aCornerB.x, penrosePattern.get(i).aCornerB.y, penrosePattern.get(i).aCornerC.x, penrosePattern.get(i).aCornerC.y);
 			pushStyle();
 			pushMatrix();
-			rectMode(RADIUS);
-			stroke(255,255,0);
-			strokeWeight(0.3f);
-			// fill(255,0,255,50);
-			// noFill();
-			// line(penrosePattern.get(i).aCornerB.x, penrosePattern.get(i).aCornerB.y, penrosePattern.get(i).aCornerC.x, penrosePattern.get(i).aCornerC.y);
-			// PVector tempVec2 = penrosePattern.get(i).aCornerB.get();
-			// float tempRotation = PVector.angleBetween(penrosePattern.get(i).aCornerB, penrosePattern.get(i).aCornerC);
-			translate(tempVec.x, tempVec.y);
-			rotate(penrosePattern.get(i).aAngleBC);
-            // println("tempRotation: " + tempRotation);
-			// rotate(mouseX/100.0);
-			strokeWeight(0.1f);
-			rect(0,0, tempRadius/2, tempRadius/2);
+			if (keyPressed) {
+				ellipse(tempVec.x, tempVec.y, tempRadius, tempRadius);
+				// arc(tempVec.x, tempVec.y, tempRadius, tempRadius,0,penrosePattern.get(i).aAngleBC);
+				translate(tempVec.x, tempVec.y);
+				rotate(penrosePattern.get(i).aAngleBC);
+				rectMode(RADIUS);
+				stroke(255,255,0);
+				strokeWeight(0.3f);
+				fill(255,0,255,50);
+				// line(penrosePattern.get(i).aCornerB.x, penrosePattern.get(i).aCornerB.y, penrosePattern.get(i).aCornerC.x, penrosePattern.get(i).aCornerC.y);
+				PVector tempVec2 = penrosePattern.get(i).aCornerB.get();
+				float tempRotation = PVector.angleBetween(penrosePattern.get(i).aCornerB, penrosePattern.get(i).aCornerC);
+				strokeWeight(0.1f);
+				// rect(0,0, tempRadius/2, tempRadius/2);
+			} else {
+				translate(tempVec.x, tempVec.y);
+				rotate(penrosePattern.get(i).aAngleBC);
+				float tempImgSize = tempRadius*2;
+				if (penrosePattern.get(i).aVariant == 0){
+
+					image(img1, -tempImgSize, -tempImgSize, tempImgSize*2, tempImgSize*2);
+				} else {
+					image(img2, -tempImgSize, -tempImgSize, tempImgSize*2, tempImgSize*2);
+				}
+			}
+
+
 			popMatrix();
 			popStyle();
 		}
