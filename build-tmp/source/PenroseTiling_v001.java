@@ -72,11 +72,33 @@ public void draw() {
 			} else {
 				fill(0,255,0,50);
 			}
+			PVector tempVec = calculateCoordinatesOfTriangleIncenter(penrosePattern.get(i).aCornerA, penrosePattern.get(i).aCornerB, penrosePattern.get(i).aCornerC).get();
+			float tempRadius = calculateRadiusOfTriangleIncenter(penrosePattern.get(i).aCornerA, penrosePattern.get(i).aCornerB, penrosePattern.get(i).aCornerC) * 2.0f;
+			ellipse(tempVec.x, tempVec.y, tempRadius, tempRadius);
 			triangle(penrosePattern.get(i).aCornerA.x, penrosePattern.get(i).aCornerA.y, penrosePattern.get(i).aCornerB.x, penrosePattern.get(i).aCornerB.y, penrosePattern.get(i).aCornerC.x, penrosePattern.get(i).aCornerC.y);
 		}
-	// println(penrosePattern.get(i).aCornerC.x);
 	}
 	popMatrix();
+}
+
+public PVector calculateCoordinatesOfTriangleIncenter(PVector _CornerA, PVector _CornerB, PVector _CornerC){
+	PVector _tempVec = _CornerA.get();
+	float tempA = _CornerB.dist(_CornerC);
+	float tempB = _CornerA.dist(_CornerC);
+	float tempC = _CornerA.dist(_CornerB);
+	_tempVec.x = ((tempA*_CornerA.x)+(tempC*_CornerC.x)+(tempB*_CornerB.x))/(tempA+tempB+tempC);
+	_tempVec.y = ((tempA*_CornerA.y)+(tempC*_CornerC.y)+(tempB*_CornerB.y))/(tempA+tempB+tempC);
+	return _tempVec;
+}
+
+public float calculateRadiusOfTriangleIncenter(PVector _CornerA, PVector _CornerB, PVector _CornerC){
+	PVector _tempVec = _CornerA.get();
+	float tempA = _CornerB.dist(_CornerC);
+	float tempB = _CornerA.dist(_CornerC);
+	float tempC = _CornerA.dist(_CornerB);
+	float tempR = (tempA+tempB+tempC)/2.0f;
+	tempR = sqrt(((tempR - tempA) * (tempR - tempB) * (tempR - tempC))/tempR);
+	return tempR;
 }
 
 public void subdivide(int _i){
