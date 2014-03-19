@@ -32,7 +32,7 @@ void setup() {
 
 	for (int j = 0; j < NUM_SUBDIVISIONS; j++) {
 		int formerPenrosePatternSize = penrosePattern.size();
-		println("formerPenrosePatternSize" + formerPenrosePatternSize);
+		// println("formerPenrosePatternSize" + formerPenrosePatternSize);
 		for (int i = 0; i < formerPenrosePatternSize; i++) {
 			subdivide(i);
 		}
@@ -142,12 +142,12 @@ void subdivide(int _i){
             penrosePattern.add(new aTriangle());
             penrosePattern.get(penrosePattern.size() - 1).setValues(penrosePattern.get(_i).aColor, 0, penrosePattern.get(_i).aCornerC, P, penrosePattern.get(_i).aCornerB);
             penrosePattern.get(penrosePattern.size() - 1).aAngleBC = calculateAngelBetweenVectors(P, penrosePattern.get(_i).aCornerB);
-            println("aAngleBC: " + penrosePattern.get(penrosePattern.size() - 1).aAngleBC);
+            // println("aAngleBC: " + penrosePattern.get(penrosePattern.size() - 1).aAngleBC);
 
             penrosePattern.add(new aTriangle());
             penrosePattern.get(penrosePattern.size() - 1).setValues(penrosePattern.get(_i).aColor, 1, P,penrosePattern.get(_i).aCornerC, penrosePattern.get(_i).aCornerA);
             penrosePattern.get(penrosePattern.size() - 1).aAngleBC = calculateAngelBetweenVectors(penrosePattern.get(_i).aCornerC, penrosePattern.get(_i).aCornerA);
-            println("aAngleBC: " + penrosePattern.get(penrosePattern.size() - 1).aAngleBC);
+            // println("aAngleBC: " + penrosePattern.get(penrosePattern.size() - 1).aAngleBC);
 
             // println("PVector P: " + P);
             // println("old aCornerA: " + penrosePattern.get(_i).aCornerA);
@@ -170,21 +170,21 @@ void subdivide(int _i){
             penrosePattern.add(new aTriangle());
             penrosePattern.get(penrosePattern.size() - 1).setValues(penrosePattern.get(_i).aColor, 1, R,penrosePattern.get(_i).aCornerC, penrosePattern.get(_i).aCornerA);
             penrosePattern.get(penrosePattern.size() - 1).aAngleBC = calculateAngelBetweenVectors(penrosePattern.get(_i).aCornerC, penrosePattern.get(_i).aCornerA);
-            println("aAngleBC: " + penrosePattern.get(penrosePattern.size() - 1).aAngleBC);
+            // println("aAngleBC: " + penrosePattern.get(penrosePattern.size() - 1).aAngleBC);
 
             penrosePattern.add(new aTriangle());
             penrosePattern.get(penrosePattern.size() - 1).setValues(penrosePattern.get(_i).aColor, 1, Q, R, penrosePattern.get(_i).aCornerB);
             penrosePattern.get(penrosePattern.size() - 1).aAngleBC = calculateAngelBetweenVectors(R, penrosePattern.get(_i).aCornerB);
-            println("aAngleBC: " + penrosePattern.get(penrosePattern.size() - 1).aAngleBC);
+            // println("aAngleBC: " + penrosePattern.get(penrosePattern.size() - 1).aAngleBC);
 
             penrosePattern.add(new aTriangle());
             penrosePattern.get(penrosePattern.size() - 1).setValues(penrosePattern.get(_i).aColor, 0, R, Q, penrosePattern.get(_i).aCornerA);
             penrosePattern.get(penrosePattern.size() - 1).aAngleBC = calculateAngelBetweenVectors(Q, penrosePattern.get(_i).aCornerA);
-            println("aAngleBC: " + penrosePattern.get(penrosePattern.size() - 1).aAngleBC);
+            // println("aAngleBC: " + penrosePattern.get(penrosePattern.size() - 1).aAngleBC);
         }
-        println("----: ");
+        // println("----: ");
     }
-    println("--------------------: ");
+    // println("--------------------: ");
 }
 
 class aTriangle{
